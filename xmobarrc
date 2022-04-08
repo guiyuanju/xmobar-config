@@ -1,34 +1,48 @@
-
+-- need nerd font to be installed
 Config { overrideRedirect = False
        , font     = "xft:Fira Code Nerd Font:size=12"
        , bgColor  = "#222222"
-       , fgColor  = "#f8f8f2"
+       , fgColor  = "#eeeeee"
        , position = TopW L 100
-       , commands = [ Run Weather "RJTT"
-                        [ "--template", "<weather> <tempC>°C"
+       , commands = [ Run WeatherX "RJTT"
+                        [ ("clear", "\xe30d")
+                        , ("sunny", "\xe30d")
+                        , ("mostly clear", "\xe30c")
+                        , ("mostly sunny", "\xe30c")
+                        , ("partly cloudy", "\xe302")
+                        , ("partly sunny", "\xe302")
+                        , ("mostly cloudy", "\xfa8f")
+                        , ("considerable cloudiness", "\xfa8f")
+                        , ("cloudy","\xe312")
+                        , ("overcast","\xe312")
+                        , ("fair", "\xfaa7") ]
+                        [ "--template", "<skyConditionS>  <tempC>°C <rh>% <windKmh>Kmh"
                         , "-L", "10"
                         , "-H", "28"
                         , "--low"   , "lightblue"
-                        , "--normal", "#f8f8f2"
-                        , "--high"  , "red"
+                        , "--normal", "#eeeeee"
+                        , "--high"  , "#ff79c6"
                         ] 36000
                     , Run Cpu
-                        [ "-L", "3"
+                        [ "-t", "\xf85a <total>%"
+                        , "-L", "3"
                         , "-H", "50"
-                        , "--high"  , "red"
-                        , "--normal", "green"
+                        , "--high"  , "#ff79c6"
+                        , "--normal", "#bd93f9"
                         ] 10
                     , Run Alsa "default" "Master"
-                        [ "--template", "<volumestatus>"
+                        [ "--template", "\xfa7f <volumestatus>"
                         , "--suffix"  , "True"
                         , "--"
                         , "--on", ""
                         ]
-                    , Run Memory ["--template", "Mem: <usedratio>%"] 10
-                    , Run Date "%a %Y-%m-%d <fc=#8be9fd>%H:%M</fc>" "date" 10
+                    , Run Memory ["--template", "\xfb19 <usedratio>%"] 10
+                    , Run DiskU [("/", "\xf0a0 <free>")] [] 60
+                    , Run Date "%b %d %a <fc=#bd93f9>%H:%M</fc>" "date" 10
+                    -- , Run Date "%a %Y-%m-%d <fc=#bd93f9>%H:%M</fc>" "date" 10
                     , Run XMonadLog
                     ]
        , sepChar  = "%"
        , alignSep = "}{"
-       , template = "%XMonadLog% }{ %alsa:default:Master% | %cpu% | %memory% | %RJTT% | %date% "
+       , template = "%XMonadLog% }{ %alsa:default:Master% | %cpu% | %memory% | %disku% | %RJTT% | %date% "
        }
